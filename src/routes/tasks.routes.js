@@ -4,7 +4,7 @@ const { getAllTasks, getTask, createTask, deleteTask, updateTask } = require('..
 const router = Router();
 
 router.get('/', ( req, res ) => {
-    res.send('Hello world');
+    res.send('TO-DO REST API');
 })
 
 router.get('/tasks', getAllTasks);
