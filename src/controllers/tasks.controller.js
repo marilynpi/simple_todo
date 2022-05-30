@@ -13,6 +13,21 @@ const getAllTasks = async( req, res, next ) => {
 
 };
 
+const getTasksByUser = async( req, res, next ) => {
+
+    try {
+        const { email } = req.params;
+        console.log(email);
+        const result = await pool.query('select * from task where email = $1', [email]);
+        console.log(result.rows);
+        res.send(result.rows);
+
+    } catch (error) {
+        next(error);
+    }
+
+};
+
 const getTask = async( req, res, next ) => {
 
     try {
@@ -32,12 +47,13 @@ const getTask = async( req, res, next ) => {
 };
 
 const createTask = async( req, res, next ) => {
-    const { title, description } = req.body;
+    const { title, description, email } = req.body;
 
     try {
-        const result = await pool.query('insert into task (title, description) values ($1, $2) returning *', [ 
+        const result = await pool.query('insert into task (title, description, email) values ($1, $2, $3) returning *', [ 
             title, 
-            description 
+            description,
+            email
         ]);
     
         res.json(result.rows[0]);
@@ -69,11 +85,12 @@ const updateTask = async( req, res ) => {
 
     try {
         const { id } = req.params;
-        const { title, description } = req.body;
+        const { title, description, finished } = req.body;
 
-        const result = await pool.query('update task set title = $1, description = $2 where id = $3 returning *', [
+        const result = await pool.query('update task set title = $1, description = $2, finished = $3 where id = $4 returning *', [
             title, 
-            description, 
+            description,
+            finished,
             id
         ]);
 
@@ -92,6 +109,7 @@ const updateTask = async( req, res ) => {
 
 module.exports = { 
     getAllTasks,
+    getTasksByUser,
     getTask,
     createTask,
     deleteTask,
