@@ -14,7 +14,7 @@ const getAllTasks = async( req, res, next ) => {
 };
 
 const getTasksByUser = async( req, res, next ) => {
-
+	console.log(pool);
     try {
         const { email } = req.params;
         console.log(email);
@@ -81,7 +81,7 @@ const deleteTask = async( req, res, next ) => {
 
 };
 
-const updateTask = async( req, res ) => {
+const updateTask = async( req, res, next ) => {
 
     try {
         const { id } = req.params;
