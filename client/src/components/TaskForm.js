@@ -32,7 +32,7 @@ export default function TaskForm() {
     setLoading(true);
     if (id) {
       console.log("editing");
-      await fetch(`http://localhost:4000/task/${id}`, {
+      await fetch(`${process.env.REACT_APP_API_SERVER}/task/${id}`, {
         method: "PUT",
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
@@ -40,7 +40,7 @@ export default function TaskForm() {
       setLoading(false);
       navigate("/");
     } else {
-      await fetch("http://localhost:4000/task", {
+      await fetch(`${process.env.REACT_APP_API_SERVER}/task`, {
         method: "POST",
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
@@ -56,7 +56,7 @@ export default function TaskForm() {
   };
 
   const getTask = async (id) => {
-    const res = await fetch(`http://localhost:4000/task/${id}`);
+    const res = await fetch(`${process.env.REACT_APP_API_SERVER}/task/${id}`);
     const data = await res.json();
     setTask({ title: data.title, description: data.description, email: data.email });
   };
@@ -69,14 +69,14 @@ export default function TaskForm() {
     }
     setBtnText(id ? "Save" : "Create");
     setTitleText(id ? "Edit" : "New");
-  }, [id, task]);
+  }, [id]);
 
   
   useEffect(() => {
     if(!isLoading) {
       setTask({ ...task, email: user.email })
     }
-  }, [isLoading, task, user.email]);
+  }, [isLoading]);
 
   return (
     isAuthenticated && (

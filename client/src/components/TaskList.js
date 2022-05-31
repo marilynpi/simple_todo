@@ -19,7 +19,7 @@ export default function TaskList() {
 
   const getTasks = async () => {
     if(user || user.email){
-      const response = await fetch(`http://localhost:4000/tasks/${user.email}`);
+      const response = await fetch(`${process.env.REACT_APP_API_SERVER}/tasks/${user.email}`);
       const data = await response.json();
       setTasks(data);
     }
@@ -28,7 +28,7 @@ export default function TaskList() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:4000/task/${id}`, {
+      await fetch(`${process.env.REACT_APP_API_SERVER}/task/${id}`, {
         method: "DELETE",
       });
       setTasks(tasks.filter((task) => task.id !== id));
@@ -41,7 +41,7 @@ export default function TaskList() {
     task.finished = !task.finished;
     console.log(task);
     try {
-      await fetch(`http://localhost:4000/task/${task.id}`, {
+      await fetch(`${process.env.REACT_APP_API_SERVER}/task/${task.id}`, {
         method: "PUT",
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
@@ -72,7 +72,7 @@ export default function TaskList() {
               <Button variant="text" onClick={() => handleDone(task)} title="Done">
               {(task.finished) ? <CheckIcon/> : <AutoAwesomeIcon/> }
               </Button>
-              <Button variant="outlined" onClick={() => navigate(`/task/${task}/edit`)} title="Edit">
+              <Button variant="outlined" onClick={() => navigate(`/task/${task.id}/edit`)} title="Edit">
                 <AutoFixNormalIcon/>
               </Button>
               <Button variant="contained" onClick={() => handleDelete(task.id)} title="Delete">
